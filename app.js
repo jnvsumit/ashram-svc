@@ -1,39 +1,39 @@
-const express = require('express');
-const cors = require('cors');
-const { graphqlHTTP } = require('express-graphql');
-const morgan = require('morgan');
-const swaggerJSDoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
-const config = require('./src/config');
-const { connectDB } = require('./src/persistence/index');
-const routes = require('./src/routes');
-const logger = require('./src/utils/logger');
+const express = require("express");
+const cors = require("cors");
+const { graphqlHTTP } = require("express-graphql");
+const morgan = require("morgan");
+const swaggerJSDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+const config = require("./src/config");
+const { connectDB } = require("./src/persistence/index");
+const routes = require("./src/routes");
+const logger = require("./src/utils/logger");
 const app = express();
 
 // Set up middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
-app.use(morgan('dev'));
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan("dev"));
 
 const options = {
   definition: {
-    openapi: '3.0.0',
+    openapi: "3.0.0",
     info: {
-      title: 'My API',
-      version: '1.0.0',
+      title: "My API",
+      version: "1.0.0",
     },
   },
-  apis: ['./routes/*.js'],
+  apis: ["./routes/*.js"],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 
 // Serve the swagger API documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Set up routes
-app.use('/api', routes);
+app.use("/api", routes);
 // app.use(
 //   '/graphql',
 //   graphqlHTTP({
@@ -43,6 +43,13 @@ app.use('/api', routes);
 //   })
 // );
 
+app.get("/", (__, res) => {
+  return res.status(200).json({
+    app: "ashram-svc",
+    version: "1.0.0",
+  });
+});
+
 // Set up error handling middleware
 app.use((err, _, res, ___) => {
   console.error(err.stack);
@@ -50,12 +57,12 @@ app.use((err, _, res, ___) => {
     message: "Internal server error",
     messageCode: "InternalServerError",
     status: 500,
-    success: false
+    success: false,
   });
 });
 
 // Start the server
 app.listen(config.port, async () => {
-    await connectDB(config.mongo.uri, config.mongo.dbName);
-    logger.info(`Server started on port ${config.port}`)
+  await connectDB(config.mongo.uri, config.mongo.dbName);
+  logger.info(`Server started on port ${config.port}`);
 });

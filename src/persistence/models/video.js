@@ -1,43 +1,51 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const videoSchema = new mongoose.Schema({
+const videoSchema = new mongoose.Schema(
+  {
     title: {
-        type: String,
-        required: true,
-        trim: true,
-        maxlength: 100
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 100,
     },
     description: {
-        type: String,
-        required: true,
-        trim: true,
-        maxlength: 500
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 500,
     },
     thumbnail: {
-        type: String,
-        required: true,
-        trim: true,
-        maxlength: 255
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 255,
     },
     url: {
-        type: String,
-        required: true,
-        trim: true,
-        maxlength: 255
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 255,
     },
     userId: {
-        type: String,
-        required: true,
-        ref: 'User'
+      type: String,
+      required: true,
+      ref: "User",
+    },
+    videoId: {
+      type: String,
+      required: true,
+      unique: true,
     },
     isPublished: {
-        type: Boolean,
-        default: false
-    }
-}, {
-    timestamps: true
-});
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-const Video = mongoose.model('Video', videoSchema);
+const Video = mongoose.model("Video", videoSchema);
 
 module.exports = Video;

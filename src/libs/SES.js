@@ -1,33 +1,33 @@
-const AWS = require('aws-sdk');
-const config = require('../config');
+const AWS = require("aws-sdk");
+const config = require("../config");
 
 const ses = new AWS.SES({
-    region: 'ap-south-1',
-    accessKeyId: config.aws.accessKeyId,
-    secretAccessKey: config.aws.secretAccessKey
+  region: "ap-south-1",
+  accessKeyId: config.aws.accessKeyId,
+  secretAccessKey: config.aws.secretAccessKey,
 });
 
 const sendEmail = (to, subject, body) => {
-    const params = {
-        Destination: {
-            ToAddresses: [to],
+  const params = {
+    Destination: {
+      ToAddresses: [to],
+    },
+    Message: {
+      Body: {
+        Text: {
+          Data: body,
         },
-        Message: {
-            Body: {
-                Text: {
-                    Data: body,
-                },
-            },
-            Subject: {
-                Data: subject,
-            },
-        },
-        Source: 'your-email-address@example.com',
-    };
+      },
+      Subject: {
+        Data: subject,
+      },
+    },
+    Source: "jnvsumit@gmail.com",
+  };
 
-    return ses.sendEmail(params).promise();
+  return ses.sendEmail(params).promise();
 };
 
 module.exports = {
-    sendEmail
+  sendEmail,
 };
